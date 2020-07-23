@@ -11,14 +11,25 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 统计指定文件中每个单词出现的个数输出格式为：华为手机	0.txt-->1222	1.txt-->1213	2.txt-->1219	3.txt-->1221
+ * 第一步输出结果为：
+ * 华为手机--0.txt	1222
+ * 华为手机--1.txt	1213
+ * 华为手机--2.txt	1219
+ * 华为手机--3.txt	1221
+ */
 public class OneIndexDriver {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+        args = new String[]{"./stepts","./output"};
 
         if (args.length != 2) {
             System.err.printf("Usage: %s [generic options] <input>  <output>  \n", "OneIndexDriver");
             System.exit(-1);
         }
+
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);
 
