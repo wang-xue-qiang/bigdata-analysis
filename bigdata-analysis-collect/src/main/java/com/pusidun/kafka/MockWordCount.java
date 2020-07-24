@@ -5,10 +5,9 @@ import com.pusidun.utils.InfoUtils;
 import java.io.FileOutputStream;
 
 /**
- * 该数据用于Hadoop测试手机号流量消费topN
+ * 该数据用于Hadoop测试wordCount程序
  */
-public class MockTopN {
-
+public class MockWordCount {
     /**
      * 运行入口
      * @param args
@@ -22,13 +21,9 @@ public class MockTopN {
      */
     private static void genFileData(){
         try {
-            FileOutputStream fos = new FileOutputStream("./topN.txt",true);
+            FileOutputStream fos = new FileOutputStream("./wordCount.txt",true);
             for (int i = 1; i <= 10000 ; i++) {
-                String phone = InfoUtils.getTel();
-                long upFlow = InfoUtils.getNum(1000,10000);
-                long downFlow = InfoUtils.getNum(1000,10000);
-                long sumFlow = upFlow + downFlow;
-                String msg = phone+"\t"+upFlow+"\t"+downFlow+"\t"+sumFlow+"\n";
+                String msg = InfoUtils.getSearchWords()+"\t"+InfoUtils.getSearchWords()+"\n";
                 fos.write(msg.getBytes());
             }
             fos.close();
@@ -36,5 +31,4 @@ public class MockTopN {
             e.printStackTrace();
         }
     }
-
 }

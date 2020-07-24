@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 /**
- * 模拟生成 nginx日志
+ * 该数据用于Flink测试统计nginx实时统计每小时排名前N的URL
  */
 public class MockNginxLog {
 

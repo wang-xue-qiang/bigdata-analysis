@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 /**
- * 生成用户信息注册
+ * 该数据用于Flink测试用户信息导入HBase
  */
 public class MockRegisterUserInfo {
 

@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * 串行jobs数据
+ * 该数据用于Hadoop测试串行jobs作业
  */
 public class MockHadoopStepts {
 

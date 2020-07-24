@@ -5,7 +5,7 @@ import com.pusidun.utils.KafkaProducer;
 import java.io.FileOutputStream;
 
 /**
- * 生成用户搜索关键字
+ * 该数据用于Flink测试用户喜爱搜索关键字
  */
 public class MockKeyWords {
 

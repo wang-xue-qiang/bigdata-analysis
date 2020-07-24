@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 /**
- * 生成统计UV信息
+ * 该数据用于Flink实时统计每小时活跃人数
  */
 public class MockUniqueVisitor {
 

@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 /**
- * 生成用户浏览品牌数据
+ * 该数据用于Flink测试用户喜爱品牌
  */
 public class MockBrandLike {
 
