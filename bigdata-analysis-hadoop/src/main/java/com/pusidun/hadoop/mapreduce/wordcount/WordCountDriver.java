@@ -15,6 +15,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class WordCountDriver {
     public static void main(String[] args) throws Exception {
 
+        args = new String[]{"./wordCount.txt","./worCount_output"};
+
         //参数设置
         if(args .length != 2){
             System.err.printf("Usage: %s [generic options] <input> <output> \n","WordCountJob");
