@@ -48,4 +48,5 @@ public class HiveJDBC {
     public static void main(String[] args) {
         readHBaseData();
     }
+
 }

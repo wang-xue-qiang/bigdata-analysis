@@ -23,7 +23,7 @@ public class OneIndexDriver {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-        args = new String[]{"./stepts","./output"};
+        args = new String[]{"./stepts","./one_output"};
 
         if (args.length != 2) {
             System.err.printf("Usage: %s [generic options] <input>  <output>  \n", "OneIndexDriver");

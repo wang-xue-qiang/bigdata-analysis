@@ -10,11 +10,13 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.io.IOException;
 
 /**
- * topN优化版
+ * topN
  */
 public class TopNDriver {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+        args = new String[]{"./topN.txt","./topN_output"};
 
         if (args.length != 2) {
             System.err.printf("Usage: %s [generic options] <input>  <output>  \n", "TopNDriver");

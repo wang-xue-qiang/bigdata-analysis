@@ -17,7 +17,7 @@ public class TwoIndexDriver {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-        args = new String[]{"./output/p*","./output2"};
+        args = new String[]{"./one_output/p*","./two_output"};
 
         if (args.length != 2) {
             System.err.printf("Usage: %s [generic options] <input>  <output>  \n", "TwoIndexDriver");
