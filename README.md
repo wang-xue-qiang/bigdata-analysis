@@ -19,6 +19,6 @@
 * ImpalaJDBC查询案例；
 ## bigdata-analysis-spark
 * SparkCore的transform、action操作；
-* SparkSQL常用案例：大表join小表；小表join大表；
+* SparkSQL常用案例：大表join大表；小表join大表；
 * SparkStreaming 状态编程wordcount案例；
 * SparkMLib 机器学习案例：分类算法K近邻算法、分类算法朴素贝叶斯算法、决策树与随机森林、线性回归、逻辑回归、聚类算法
