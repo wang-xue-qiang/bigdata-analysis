@@ -23,4 +23,4 @@
 * SparkCore的Transformation、Action操作；
 * SparkSQL常用案例：大表Join大表；小表Join大表；
 * SparkStreaming 状态编程WordCount案例；
-* SparkMLib 机器学习案例：分类算法K近邻算法、分类算法朴素贝叶斯算法、决策树与随机森林、线性回归、逻辑回归、聚类算法；
+* SparkMLlib 机器学习案例：分类算法K近邻算法、分类算法朴素贝叶斯算法、决策树与随机森林、线性回归、逻辑回归、聚类算法；
