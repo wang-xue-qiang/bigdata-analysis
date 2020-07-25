@@ -11,7 +11,7 @@ object FirstSql {
     //创建SparkConf()并设置App名称
     val spark = SparkSession
       .builder()
-      .appName("Spark SQL basic example")
+      .appName("FirstSql")
       .config("spark.some.config.option", "some-value")
       .master("local")
       .getOrCreate()

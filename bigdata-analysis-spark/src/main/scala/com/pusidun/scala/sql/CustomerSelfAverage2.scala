@@ -18,13 +18,13 @@ object CustomerSelfAverage2 {
     df.createOrReplaceTempView("employees")
     df.show()
 
-    spark.udf.register("myAverage", MyAverage)
+    spark.udf.register("myAverage", MyAverage2)
     spark.sql("SELECT myAverage(salary) as average_salary FROM employees").show()
     spark.stop()
   }
 }
 
-object  MyAverage extends UserDefinedAggregateFunction {
+object  MyAverage2 extends UserDefinedAggregateFunction {
   // 聚合函数输入参数的数据类型
   override def inputSchema: StructType = StructType(StructField("inputColumn", LongType) :: Nil)
 

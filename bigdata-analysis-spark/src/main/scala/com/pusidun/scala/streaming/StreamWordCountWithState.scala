@@ -1,4 +1,4 @@
-package com.pusidun.scala.core
+package com.pusidun.scala.streaming
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
