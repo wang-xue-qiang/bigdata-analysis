@@ -21,13 +21,12 @@ object FPGrowth extends App {
   val path = this.getClass.getClassLoader.getResource("fpgrowth.txt").getPath
 
   //创建交易样本
-  val transactions = sc.textFile(path).map(_.split(" ")).cache()
+  val transactions = sc.textFile(path).map(_.split(" "))
 
-  println(s"交易样本的数量为： ${transactions.count()}")
+  println(s"大乐透历史开奖期数： ${transactions.count()}")
 
   //最小支持度（0，1）
-  val minSupport = 0.4
-
+  val minSupport = 0.001
   //计算的并行度
   val numPartition = 2
 
@@ -38,10 +37,14 @@ object FPGrowth extends App {
     .run(transactions)
 
   //打印模型结果
-  println(s"经常一起购买的物品集的数量为： ${model.freqItemsets.count()}")
+  println(s"红球频繁项集数量： ${model.freqItemsets.count()}")
 
-  model.freqItemsets.collect().foreach { itemset =>
-    println(itemset.items.mkString("[", ",", "]") + ", " + itemset.freq)
+  model.freqItemsets.collect().foreach { itemset =>{
+    if (itemset.freq == 2) {
+      println(itemset.items.mkString("[", ",", "]") + "\t" + itemset.freq)
+    }
+  }
+
   }
 
   sc.stop()
