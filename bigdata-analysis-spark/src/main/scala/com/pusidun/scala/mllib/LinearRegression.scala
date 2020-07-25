@@ -1,6 +1,5 @@
 package com.pusidun.scala.mllib
 
-import org.apache.log4j.{Level, Logger}
 import org.apache.spark.mllib.util.MLUtils
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
@@ -15,10 +14,6 @@ object LinearRegression {
 
   def main(args: Array[String]): Unit = {
 
-    //屏蔽日志
-    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
-    Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
-
     //创建SparkContext
     val conf = new SparkConf().setMaster("local").setAppName("LinearRegression")
     val sc = new SparkContext(conf)
@@ -27,13 +22,13 @@ object LinearRegression {
     val path = this.getClass.getClassLoader.getResource("data.txt").getPath
 
     //通过提供的工具类加载样本文件
-    val data = MLUtils.loadLibSVMFile(sc,path).cache()
+    //val data = MLUtils.loadLibSVMFile(sc,path).cache()
 
     //或者通过RDD装换加载
-    /*val data = sc.textFile(path).map { line =>
+    val data = sc.textFile(path).map { line =>
       val parts = line.split(' ')
       LabeledPoint(parts(0).toDouble, Vectors.dense(parts.tail.map(_.split(":")(1).toDouble)))
-    }.cache()*/
+    }.cache()
 
     //迭代次数
     val numIterations = 100
