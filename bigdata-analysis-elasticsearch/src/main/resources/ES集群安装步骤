@@ -1,0 +1,76 @@
+集群搭建下载地址：
+    https://www.elastic.co/cn/downloads/past-releases/elasticsearch-6-3-0
+解压文件：
+    tar -xvf elasticsearch-6.3.0.tar.gz -C /opt/apache
+创建用户es
+    groupadd es
+    useradd es -g es -p 123456
+    chown -R es:es /opt/apache/elasticsearch-6.3.0/
+修改配置文件elasticsearch.yml
+    cluster.name: elasticsearch
+    node.name: node-1
+    path.data: /opt/apache/elasticsearch-6.3.0/data
+    path.logs: /opt/apache/elasticsearch-6.3.0/logs
+    network.host: 192.168.12.130
+    http.port: 9200
+    transport.tcp.port: 9300
+    transport.tcp.compress: true
+    discovery.zen.ping.unicast.hosts: ["192.168.12.130", "192.168.12.131","192.168.12.132"]
+    gateway.recover_after_nodes: 2
+    http.cors.enabled: true
+    http.cors.allow-origin: "*"
+启动es
+    su es
+    nohup /opt/apache/elasticsearch-6.3.0/bin/elasticsearch &
+查看是否启动
+    ps -ef | grep elastic
+
+    curl -i "http://192.168.12.130:9200"
+    HTTP/1.1 200 OK
+    content-type: application/json; charset=UTF-8
+    content-length: 492
+    {
+      "name" : "node-1",
+      "cluster_name" : "elasticsearch",
+      "cluster_uuid" : "45tGjkXmRDeq9_k47oqdBA",
+      "version" : {
+        "number" : "6.3.0",
+        "build_flavor" : "default",
+        "build_type" : "tar",
+        "build_hash" : "424e937",
+        "build_date" : "2018-06-11T23:38:03.357887Z",
+        "build_snapshot" : false,
+        "lucene_version" : "7.3.1",
+        "minimum_wire_compatibility_version" : "5.6.0",
+        "minimum_index_compatibility_version" : "5.0.0"
+      },
+      "tagline" : "You Know, for Search"
+    }
+
+安装elasticsearch-head
+    git clone git://github.com/mobz/elasticsearch-head.git
+    cd elasticsearch-head
+    npm install
+    npm run start
+    open http://localhost:9100/
+需要安装依赖node和npm
+    node -v
+    npm
+配置修改
+    # 修改 this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://localhost:9200";   # 在文件的4354行附近
+    # 这里的 localhost 是指进入elasticsearch-head页面时默认访问的ES集群地址，把她修改为其中一台ES节点的地址即可
+    this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://192.168.12.130:9200";
+    还要修改Head主目录下的Gruntfile.js，由于默认文件中是没有hostname属性的，我们需要手动添加 hostname : '*'
+    server: {
+            options: {
+                    port: 9100,
+                    base: '.',
+                    keepalive: true,
+                    hostname: '*'
+            }
+    }
+启动elasticsearch-head
+    cd /opt/apache/elasticsearch-head
+    grunt server //若想在后台运行，结尾追加“&”,也可以使用 npm run start启动
+访问地址
+    http://192.168.12.130:9100
