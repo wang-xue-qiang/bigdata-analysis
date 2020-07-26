@@ -1,0 +1,16 @@
+下载地址国内镜像
+    https://www.newbe.pro/Mirrors/Mirrors-Kibana/
+解压
+    tar -xvf kibana-6.3.0-linux-x86_64.tar.gz
+修改名称
+    mv kibana-6.3.0-linux-x86_64/ kibana-6.3.0
+修改配置文件  kibana.yml
+    vim  kibana.yml
+    server.port: 5601
+    server.host: "0.0.0.0"
+    elasticsearch.url: "http://192.168.12.130:9200"    //修改成自己集群的端口号
+    kibana.index: ".kibana"
+启动
+    nohup /opt/apache/kibana-6.3.0/bin/kibana &
+访问
+    http://192.168.12.130:5601

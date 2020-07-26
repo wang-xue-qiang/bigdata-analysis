@@ -70,23 +70,5 @@ public class EsClientUtils {
         }
     }
 
-    public static void main(String[] args) {
-        EsClientUtils esClient = EsClientUtils.getInstance();
-        for (int i = 1; i < 10000; i++) {
-            Map userMap = new HashMap();
-            String uid = String.format("%010d", i);
-            String name = InfoUtils.getChineseName();
-            int age = InfoUtils.getNum(18, 45);
-            String phone = InfoUtils.getTel();
-            String email = InfoUtils.getEmail(10, 12);
-            String address = InfoUtils.getRoad();
-            userMap.put("uid",uid);
-            userMap.put("name",name);
-            userMap.put("age",age);
-            userMap.put("phone",phone);
-            userMap.put("email",email);
-            userMap.put("address",address);
-            esClient.addIndexMap("shop-user","shop-user",userMap);
-        }
-    }
+
 }

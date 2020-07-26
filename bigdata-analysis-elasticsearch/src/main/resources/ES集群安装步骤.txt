@@ -25,6 +25,8 @@
 查看是否启动
     ps -ef | grep elastic
 
+    curl http://192.168.12.130:9200/_cat/indices?v
+
     curl -i "http://192.168.12.130:9200"
     HTTP/1.1 200 OK
     content-type: application/json; charset=UTF-8
