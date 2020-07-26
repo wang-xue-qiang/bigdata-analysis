@@ -1,16 +1,15 @@
 package com.pusidun.scala.optimize
 
-import com.pusidun.scala.optimize.SourceData.KeyWordLog
 import org.apache.spark.sql.SparkSession
 
 /**
-  * 分区不均匀导致数据倾斜
+  * 通过调整分区数量解决数据倾斜案例。
   */
-object NewSourceTet {
+object NewSourceTest {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder()
-      .appName("SourceData")
+      .appName("NewSourceTest")
       .master("local")
       .getOrCreate()
     val sc = spark.sparkContext

@@ -1,9 +1,6 @@
 package com.pusidun.scala.optimize
 
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.{SparkConf, SparkContext}
-
-import scala.collection.mutable.ArrayBuffer
 
 /**
   * 数据优化案例：原始数据处理
