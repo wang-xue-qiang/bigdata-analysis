@@ -3,7 +3,7 @@ package com.pusidun.scala.optimize
 import org.apache.spark.sql.SparkSession
 
 /**
-  * 通过自定义分区解决数据倾斜。
+  * 通过自定义分区解决数据倾斜案例。
   * :paste
   *  自定义分区
   */
