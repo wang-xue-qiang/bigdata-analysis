@@ -23,7 +23,7 @@
 4.数据倾斜常见解决方案？
 答：
 (1) 数据源分布不均：常见收集web系统中如Kafka,可以写一定的算法在源头处理；
-(2) reduceByKey(100) groupByKey(12) 增加或者减少并行度
+(2) reduceByKey(200) groupByKey(10) 增加或者减少并行度
 方案实现原理：增加shuffle read task的数量，可以让原本分配给一个task的多个key分配给多个task，从而让每个task处理比原来更少的数据。举例来说，如果原本有5个key，
 每个key对应10条数据，这5个key都是分配给一个task的，那么这个task就要处理50条数据。而增加了shuffle read task以后，每个task就分配到一个key，即每个task就处理10条数据，那么自然每个task的执行时间都会变短了。具体原理如下图所示。
 方案优点：实现起来比较简单，可以有效缓解和减轻数据倾斜的影响。
