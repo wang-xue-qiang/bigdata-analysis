@@ -5,6 +5,7 @@
 * 模拟生成电商平台用户信息注册、搜索、点击品牌、登录的测试数据；
 * 模拟生成Hadoop中WordCount、TopN、Job串行等作业的测试数据；
 #### bigdata-analysis-elasticsearch
+* ES集群搭建文档；
 * 文档的创建新增删除；
 * 文档的查询；
 #### bigdata-analysis-flink
@@ -20,6 +21,7 @@
 * HiveJDBC查询案例；
 * ImpalaJDBC查询案例；
 #### bigdata-analysis-spark
+* Spark调优案例文档梳理；
 * SparkCore的Transformation、Action操作；
 * SparkSQL常用案例：大表Join大表；小表Join大表；
 * SparkStreaming 状态编程WordCount案例；
