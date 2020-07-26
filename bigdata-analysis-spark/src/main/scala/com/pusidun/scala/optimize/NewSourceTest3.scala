@@ -1,12 +1,17 @@
 package com.pusidun.scala.optimize
 
-import com.pusidun.scala.optimize.NewSourceTest2.CustomerPartitioner
+
 import org.apache.spark.sql.SparkSession
 
 /**
-  * Reduce side Join转变为Map sideJoin 案例。
-  * 使用场景：大表和小表(几百兆)join操作。
-  * 采用广播小RDD全量数据+Map算子来实现
+  * 缓解数据倾斜 - Reduce side Join转变为Map side Join案例。
+  * 方案适用场景：在对RDD使用join类操作，或者是在Spark SQL中使用join语句时，而且join操作中的一个RDD或表的数据量比较小（比如几百M），
+  * 比较适用此方案。
+  * 方案实现原理：普通的join是会走shuffle过程的，而一旦shuffle，就相当于会将相同key的数据拉取到一个shuffle read task中再进行join，
+  * 此时就是reduce join。但是如果一个RDD是比较小的，则可以采用广播小RDD全量数据+map算子来实现与join同样的效果，也就是map join，
+  * 此时就不会发生shuffle操作，也就不会发生数据倾斜。
+  * 方案优点：对join操作导致的数据倾斜，效果非常好，因为根本就不会发生shuffle，也就根本不会发生数据倾斜。
+  * 方案缺点：适用场景较少，因为这个方案只适用于一个大表和一个小表的情况。
   */
 object NewSourceTest3 {
   def main(args: Array[String]): Unit = {
