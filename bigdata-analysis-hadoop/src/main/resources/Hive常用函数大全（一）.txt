@@ -1,14 +1,14 @@
 测试数据准备
 user_id device_id   user_type  price    sales
-0000001 assdsfgdg   new 67.89   1
-0000002 wwwdsfgdg   old 77.89   2
-0000003 sssdsfgdg   new 37.89   3
-0000004 ddddsfgdg   new 27.89   2
-0000005 eretdsfgg   new 17.89   5
-0000006 ertdsfgdg   old 67.89   2
-0000007 thndsfgdg   new 87.89   1
-0000008 yhmdsfgdg   new 97.89   2
-0000019 opldsfgdg   new 17.89   6
+0000001 qwertyfdd       new     67.89   3
+0000002 wwwdsfgdg       old     77.89   2
+0000003 sssdsfgdg       new     37.89   3
+0000004 ddddsfgdg       new     27.89   2
+0000005 eretdsfgg       new     17.89   5
+0000006 ertdsfgdg       old     67.89   2
+0000007 thndsfgdg       new     87.89   1
+0000008 yhmdsfgdg       new     97.89   2
+0000019 opldsfgdg       new     17.89   6
 创建表
 create external table if not exists order_detail(
 user_id string,
@@ -20,6 +20,8 @@ sales int
 row format delimited fields terminated by '\t'
 lines terminated by '\n'
 stored as textfile;
+加载数据
+load data local inpath "/opt/datas/order.txt" into  table order_detail;
 
 关系运算
     1. > < =
