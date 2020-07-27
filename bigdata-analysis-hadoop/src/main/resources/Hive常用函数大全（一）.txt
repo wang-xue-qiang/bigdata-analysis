@@ -1,0 +1,134 @@
+测试数据准备
+user_id device_id   user_type  price    sales
+0000001 assdsfgdg   new 67.89   1
+0000002 wwwdsfgdg   old 77.89   2
+0000003 sssdsfgdg   new 37.89   3
+0000004 ddddsfgdg   new 27.89   2
+0000005 eretdsfgg   new 17.89   5
+0000006 ertdsfgdg   old 67.89   2
+0000007 thndsfgdg   new 87.89   1
+0000008 yhmdsfgdg   new 97.89   2
+0000019 opldsfgdg   new 17.89   6
+创建表
+create external table if not exists order_detail(
+user_id string,
+device_id string,
+user_type string,
+price double,
+sales int
+)
+row format delimited fields terminated by '\t'
+lines terminated by '\n'
+stored as textfile;
+
+关系运算
+    1. > < =
+    select long_time>short_time, long_time<short_time,long_time=short_time, to_date(long_time)=to_date(short_time)
+    from
+    (
+        select '2017-01-11 00:00:00' as long_time, '2017-01-11' as short_time
+        from
+        order_detail limit 1
+    )t;
+    2. 空值判断
+    select * from order_detail where 1 is not NULL limit 1;
+    3.LIKE
+    select user_id from order_detail where user_id like '000001%';
+
+数学运算
+    1. + - * / %
+    Hive中最高精度的数据类型是 double,只精确到小数点后16位，在做除法运算的时候要特别注意。
+    select user_id,100-price,sales+1,price*sales,price/sales,price%sales from order_detail;
+    2.位与& 位或| 位异或^ 位取反~
+    select 4&6, 8&4, 4|8,6|8,4^8,6^4,~6,~3 from order_detail limit 1;
+
+逻辑运算
+    1.逻辑与AND 逻辑或OR 逻辑非NOT 注意：优先级一次为NOT AND OR
+    select user_id from order_detail where not ((user_id='0000006' or user_id like '0000001%') and user_type='old');
+
+数值计算函数
+    1.取整: round(double a) 遵循四舍五入
+    2.指定精度取整: round(double a, int d)
+    3.向下取整: floor 返回等于或者小于该double变量的最大的整数
+    4.向上取整: ceil 返回等于或者大于该double变量的最小的整数
+    5.向上取整: ceiling 与ceil功能相同
+    select user_id,price,round(price),round(price,0),round(price,1),floor(price),ceil(price),ceiling(price) from order_detail;
+
+日期函数
+    1.UNIX时间戳转日期: from_unixtime
+    2.日期转UNIX时间戳,指定格式日期转UNIX 时间戳,获取当前UNIX时间戳: unix_timestamp,转换格式为"yyyy-MM-dd HH:mm:ss"的日期到 UNIX 时间戳。如果转化失败，则返回 0。
+    3.日期时间转日期:to_date  日期转年:year 日期转月:month 日期转天:day 日期转小时:hour  日期转分钟:minute  日期转秒:second
+    4.日期转周:weekofyear   日期比较:datediff
+    5.日期增加: date_add 日期减少: date_sub
+    select
+        from_unixtime(1595831922),
+        from_unixtime(1595831922,'yyyy-MM-dd'),
+        unix_timestamp(),
+        unix_timestamp('2020-07-27 16:01:03'),
+        unix_timestamp('20200727 16-01-03','yyyyMMdd HH-mm-ss'),
+        to_date('2020-07-27 10:03:01'),
+        year('2020-07-27 10:03:01'),
+        month('2020-07-27'),
+        day('2020-07-27 10:03:01'),
+        hour('2020-07-27 10:03:01'),
+        minute('2020-07-27 10:03:01'),
+        second('2020-07-27 10:03:01'),
+        weekofyear('2020-07-27 10:03:01'),
+        datediff('2020-07-01','2020-07-27'),
+        date_add('2020-07-27',10),
+        date_sub('2020-07-27',10)
+    from
+    order_detail limit 1;
+
+字符串函数
+    1.字符串长度:length 字符串反转:reverse 字符串连接:concat 带分隔符字符串连接:concat_ws
+    select
+    user_id,device_id,user_type,length(user_id),reverse(user_id),
+    concat(user_id,device_id,user_type),concat_ws('_',user_id,device_id,user_type)
+    from order_detail;
+    2.字符串截取函数： substr,substring
+    select user_id,substr(user_id,3),substr(user_id,-2),substring(user_id,1,2),substr(user_id,-2,2) from order_detail;
+    3.字符串转大写:upper,ucase  字符串转小写:lower,lcase
+    4.去两边的空格:trim  左边去空格:ltrim  右边去空格:rtrim
+    5.json解析:get_json_object 语法: get_json_object(string json_string, string path)解析json的字符串json_string,
+    返回path指定的内容。如果输入的json字符串无效，那么返回 NULL。
+    select
+    get_json_object(
+    '{"store":
+    {"fruit":\[{"weight":8,"type":"apple"},{"weight":9,"type":"pear"}],
+    "bicycle":{"price":19.95,"color":"red"}
+    },
+    "email":"amy@only_for_json_udf_test.net",
+    "owner":"amy"
+    }',
+    '$.owner'),
+    get_json_object(
+    '{"store":
+    {"fruit":\[{"weight":8,"type":"apple"},{"weight":9,"type":"pear"}],
+    "bicycle":{"price":19.95,"color":"red"}
+    },
+    "email":"amy@only_for_json_udf_test.net",
+    "owner":"amy"
+    }',
+    '$.store.fruit[0].type')
+    from order_detail limit 1;
+    6.json_tuple(string jsonStr,string k1,string k2, ...)参数为一组键k1，k2……和JSON字符串，返回值的元组。该方法比 get_json_object 高效，因为可以在一次调用中输入多个键。
+    select a.user_id, b.*
+    from order_detail a
+    lateral view
+    json_tuple('{"store":
+    {"fruit":\[{"weight":8,"type":"apple"},{"weight":9,"type":"pear"}],
+    "bicycle":{"price":19.95,"color":"red"}
+    },
+    "email":"amy@only_for_json_udf_test.net",
+    "owner":"amy"
+    }', 'email', 'owner') b as email, owner limit 1;
+    7.string转map：str_to_map使用两个分隔符将文本拆分为键值对。 Delimiter1将文本分成K-V对，Delimiter2分割每个K-V对。
+    对于delimiter1默认分隔符是'，'，对于delimiter2默认分隔符是':'。
+    select str_to_map('aaa:11&bbb:22', '&', ':') from order_detail limit 1;
+
+集合统计函数
+    1. count,sum,sum(DISTINCT col)
+    2. avg,min,max
+    3. 方差：var_samp, var_pop当我们需要真实的标准差/方差的时候最好是使用:stddev stddev_pop var_pop,
+    而只是需要得到少量数据的标准差/方差的近似值可以选用:stddev_samp var_samp

@@ -38,7 +38,7 @@ public class HiveJDBC {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                System.out.println("rk:" + rs.getString("rk"));
+                System.out.println("rk:" + rs.getInt("rk")+"\tname:"+rs.getString("name")+"\tage:"+rs.getInt("age"));
             }
         }catch (Exception e){
             e.printStackTrace();

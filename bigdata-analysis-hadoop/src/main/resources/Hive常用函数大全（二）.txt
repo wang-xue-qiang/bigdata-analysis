@@ -1,0 +1,176 @@
+窗口函数与分析函数
+应用场景：
+（1）用于分区排序
+（2）动态Group By
+（3）Top N
+（4）累计计算
+（5）层次查询
+
+窗口函数
+FIRST_VALUE：
+    取分组内排序后，截止到当前行，第一个值
+LAST_VALUE：
+    取分组内排序后，截止到当前行，最后一个值
+LEAD(col,n,DEFAULT) ：
+    用于统计窗口内往下第n行值。第一个参数为列名，第二个参数为往下第n行（可选，默认为1），
+    第三个参数为默认值（当往下第n行为NULL时候，取默认值，如不指定，则为NULL）
+LAG(col,n,DEFAULT) ：与lead相反，用于统计窗口内往上第n行值。第一个参数为列名，第二个参数为往上第n行（可选，默认为1），
+    第三个参数为默认值（当往上第n行为NULL时候，取默认值，如不指定，则为NULL）
+
+OVER从句
+1、使用标准的聚合函数COUNT、SUM、MIN、MAX、AVG。
+2、使用PARTITION BY语句，使用一个或者多个原始数据类型的列。
+3、使用PARTITION BY与ORDER BY语句，使用一个或者多个数据类型的分区或者排序列。
+4、使用窗口规范，窗口规范支持以下格式：
+(ROWS | RANGE) BETWEEN (UNBOUNDED | [num]) PRECEDING AND ([num] PRECEDING | CURRENT ROW | (UNBOUNDED | [num]) FOLLOWING)
+(ROWS | RANGE) BETWEEN CURRENT ROW AND (CURRENT ROW | (UNBOUNDED | [num]) FOLLOWING)
+(ROWS | RANGE) BETWEEN [num] FOLLOWING AND (UNBOUNDED | [num]) FOLLOWING
+当ORDER BY后面缺少窗口从句条件，窗口规范默认是 RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW；
+当ORDER BY和窗口从句都缺失, 窗口规范默认是 ROW BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING。
+OVER从句支持以下函数Rank, NTile, DenseRank, CumeDist, PercentRank但是并不支持和窗口一起使用如Lead,Lag。
+
+
+分析函数
+    1.ROW_NUMBER() 从1开始，按照顺序，生成分组内记录的序列,比如，按照pv降序排列，生成分组内每天的pv名次,ROW_NUMBER()的应用场景非常多，再比如，获取分组内排序第一的记录;
+    获取一个session中的第一条refer等。
+    2.RANK() 生成数据项在分组中的排名，排名相等会在名次中留下空位
+    3.DENSE_RANK() 生成数据项在分组中的排名，排名相等会在名次中不会留下空位
+    4.CUME_DIST 小于等于当前值的行数/分组内总行数。比如，统计小于等于当前薪水的人数，所占总人数的比例
+    5.PERCENT_RANK 分组内当前行的RANK值-1/分组内总行数-1
+    6.NTILE(n) 用于将分组数据按照顺序切分成n片，返回当前切片值，如果切片不均匀，默认增加第一个切片的分布。
+    NTILE不支持ROWS BETWEEN，比如 NTILE(2) OVER(PARTITION BY cookieid ORDER BY createtime ROWS BETWEEN 3 PRECEDING AND CURRENT ROW)。
+
+Hive2.1.0及以后支持Distinct
+    在聚合函数（SUM, COUNT and AVG）中，支持distinct，但是在ORDER BY 或者 窗口限制不支持。
+Hive 2.2.0中在使用ORDER BY和窗口限制时支持distinct
+    COUNT(DISTINCT a) OVER (PARTITION BY c ORDER BY d ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
+Hive2.1.0及以后支持在OVER从句中支持聚合函数
+    SELECT rank() OVER (ORDER BY sum(b)) FROM T GROUP BY a;
+案例：
+## COUNT、SUM、MIN、MAX、AVG
+select
+    user_id,
+    user_type,
+    sales,
+    --默认为从起点到当前行
+    sum(sales) OVER(PARTITION BY user_type ORDER BY sales asc) AS sales_1,
+    --从起点到当前行，结果与sales_1不同。
+    sum(sales) OVER(PARTITION BY user_type ORDER BY sales asc ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS sales_2,
+    --当前行+往前3行
+    sum(sales) OVER(PARTITION BY user_type ORDER BY sales asc ROWS BETWEEN 3 PRECEDING AND CURRENT ROW) AS sales_3,
+    --当前行+往前3行+往后1行
+    sum(sales) OVER(PARTITION BY user_type ORDER BY sales asc ROWS BETWEEN 3 PRECEDING AND 1 FOLLOWING) AS sales_4,
+    --当前行+往后所有行
+    sum(sales) OVER(PARTITION BY user_type ORDER BY sales asc ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS sales_5,
+    --分组内所有行
+    SUM(sales) OVER(PARTITION BY user_type) AS sales_6
+from
+    order_detail
+order by
+    user_type,
+    sales,
+    user_id;
+注意:
+结果和ORDER BY相关,默认为升序
+如果不指定ROWS BETWEEN,默认为从起点到当前行;
+如果不指定ORDER BY，则将分组内所有值累加;
+关键是理解ROWS BETWEEN含义,也叫做WINDOW子句：
+PRECEDING：往前
+FOLLOWING：往后
+CURRENT ROW：当前行
+UNBOUNDED：无界限（起点或终点）
+UNBOUNDED PRECEDING：表示从前面的起点
+UNBOUNDED FOLLOWING：表示到后面的终点
+其他COUNT、AVG，MIN，MAX，和SUM用法一样。
+
+## first_value与last_value
+select
+    user_id,
+    user_type,
+    ROW_NUMBER() OVER(PARTITION BY user_type ORDER BY sales) AS row_num,
+    first_value(user_id) over (partition by user_type order by sales desc) as max_sales_user,
+    first_value(user_id) over (partition by user_type order by sales asc) as min_sales_user,
+    last_value(user_id) over (partition by user_type order by sales desc) as curr_last_min_user,
+    last_value(user_id) over (partition by user_type order by sales asc) as curr_last_max_user
+from
+    order_detail;
+
+## lead与lag
+select
+    user_id,device_id,
+    lead(device_id) over (order by sales) as default_after_one_line,
+    lag(device_id) over (order by sales) as default_before_one_line,
+    lead(device_id,2) over (order by sales) as after_two_line,
+    lag(device_id,2,'abc') over (order by sales) as before_two_line
+from
+    order_detail;
+
+## RANK、ROW_NUMBER、DENSE_RANK
+select
+    user_id,user_type,sales,
+    RANK() over (partition by user_type order by sales desc) as r,
+    ROW_NUMBER() over (partition by user_type order by sales desc) as rn,
+    DENSE_RANK() over (partition by user_type order by sales desc) as dr
+from
+    order_detail;
+
+## NTILE
+select
+    user_type,sales,
+    --分组内将数据分成2片
+    NTILE(2) OVER(PARTITION BY user_type ORDER BY sales) AS nt2,
+    --分组内将数据分成3片
+    NTILE(3) OVER(PARTITION BY user_type ORDER BY sales) AS nt3,
+    --分组内将数据分成4片
+    NTILE(4) OVER(PARTITION BY user_type ORDER BY sales) AS nt4,
+    --将所有数据分成4片
+    NTILE(4) OVER(ORDER BY sales) AS all_nt4
+from
+    order_detail
+order by
+    user_type,
+    sales
+
+
+
+增强的聚合Cube和Grouping和Rollup
+    1.GROUPING SETS 在一个GROUP BY查询中，根据不同的维度组合进行聚合，等价于将不同维度的GROUP BY结果集进行UNION ALL,
+    其中的GROUPING__ID，表示结果属于哪一个分组集合。
+    select
+        user_type,
+        sales,
+        count(user_id) as pv,
+        GROUPING__ID
+    from
+        order_detail
+    group by
+        user_type,sales
+    GROUPING SETS(user_type,sales,(user_type,sales))
+    ORDER BY
+        GROUPING__ID;
+    2.CUBE根据GROUP BY的维度的所有组合进行聚合。
+    select
+        user_type,
+        sales,
+        count(user_id) as pv,
+        GROUPING__ID
+    from
+        order_detail
+    group by
+        user_type,sales
+    WITH CUBE
+    ORDER BY
+        GROUPING__ID;
+    3.ROLLUP是CUBE的子集，以最左侧的维度为主，从该维度进行层级聚合。
+    select
+        user_type,
+        sales,
+        count(user_id) as pv,
+        GROUPING__ID
+    from
+        order_detail
+    group by
+        user_type,sales
+    WITH ROLLUP
+    ORDER BY
+        GROUPING__ID;
