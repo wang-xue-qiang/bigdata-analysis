@@ -36,7 +36,7 @@ public class TestES {
         //查询单个索引
         //getOne(index,type,"bwz1uHMBngYiDPYOIE-T");
         //多条件And查询
-        //getOneByNameAndAge(index,type);
+        getOneByNameAndAge(index,type);
         //多条件or查询
         getOneByNameOrAge(index,type);
     }
@@ -105,8 +105,8 @@ public class TestES {
         TransportClient client = getClient();
         //封装查询条件must相当于and
         QueryBuilder qb = QueryBuilders.boolQuery()
-                //.must(QueryBuilders.termQuery("name","焦影琰"))
-                .must(QueryBuilders.termQuery("age",21)) ;
+                .must(QueryBuilders.matchPhraseQuery("name","宫子克"))
+                .must(QueryBuilders.termQuery("age",40)) ;
         SearchResponse response = client.prepareSearch(index)
                 .setTypes(type)
                 .setQuery(qb)
@@ -129,12 +129,18 @@ public class TestES {
      * 根据多条件组合与查询   相当于mysql语句 select * from tableName where name='游筠' or age=21;
      * @param index 索引：相当于mysql库
      * @param type 类型：相当于mysql表
+     *
+     * should(QueryBuilders.matchQuery("xm","好的"))//分词后匹配
+     * should(QueryBuilders.matchPhraseQuery("addr","钱江路"))//匹配完整词
+     * should(QueryBuilders.termQuery("status",0))//完全匹配
+     * should(QueryBuilders.termsQuery("keyword",string[]))//多关键字匹配
+     *
      */
     public static void getOneByNameOrAge(String index, String type){
         TransportClient client = getClient();
         //两个条件或查询
         QueryBuilder s = QueryBuilders.boolQuery()
-                .should(QueryBuilders.termQuery("name","游筠"))
+                .should(QueryBuilders.matchPhraseQuery("name","游筠"))
                 .should(QueryBuilders.termQuery("age",45));
         //根据age降序
         SortBuilder sortBuilder= SortBuilders.fieldSort("age");
