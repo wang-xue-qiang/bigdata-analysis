@@ -10,8 +10,11 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.LongTerms;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
@@ -62,6 +65,8 @@ public class TestES {
         getSumAge(index,type);
         //年龄大于等于30并且小于等于40的各项指标
         getAgeStats(index,type);
+        //
+        getGroupByAge(index,type);
     }
 
     /**
@@ -379,9 +384,7 @@ public class TestES {
      */
     public static void getAgeStats(String index, String type){
         TransportClient client = getClient();
-
         AggregationBuilder termsBuilder = AggregationBuilders.stats("ageStats").field("age");
-
         QueryBuilder query = QueryBuilders.rangeQuery("age").from(30,true).to(40,true);
         SearchResponse response = client.prepareSearch(index)
                 .setTypes(type)
@@ -401,6 +404,46 @@ public class TestES {
         }
         client.close();
     }
+
+    /**
+     * 年龄分组聚合
+     * @param index 索引
+     * @param type 类型
+     */
+    public static void getGroupByAge(String index, String type){
+        TransportClient client = getClient();
+
+        AggregationBuilder  termsBuilder = AggregationBuilders.terms("by_age").field("age");
+        AggregationBuilder  sumBuilder   = AggregationBuilders.sum("ageSum").field("age");
+        AggregationBuilder  avgBuilder   = AggregationBuilders.avg("ageAvg").field("age");
+        AggregationBuilder  countBuilder = AggregationBuilders.count("ageCount").field("age");
+        termsBuilder.subAggregation(sumBuilder).subAggregation(avgBuilder).subAggregation(countBuilder);
+
+        QueryBuilder query = QueryBuilders.rangeQuery("age").from(30,true).to(40,true);
+        //根据age降序
+        SortBuilder sortBuilder = SortBuilders.fieldSort("age");
+        sortBuilder.order(SortOrder.DESC);
+        SearchResponse response = client.prepareSearch(index)
+                .setTypes(type)
+                .setQuery(query)
+                .addAggregation(termsBuilder)
+                .addSort(sortBuilder)
+                .get();
+        Aggregations terms = response.getAggregations();
+        for (Aggregation a : terms) {
+            LongTerms teamSum = (LongTerms)a;
+            for (LongTerms.Bucket bucket : teamSum.getBuckets()) {
+                System.out.println(bucket.getKeyAsString()+"   "+bucket.getDocCount()+"    "+
+                        ((Sum)bucket.getAggregations().asMap().get("ageSum")).getValue()+"    "+
+                        ((Avg)bucket.getAggregations().asMap().get("ageAvg")).getValue()+"    "+
+                        ((ValueCount)bucket.getAggregations().asMap().get("ageCount")).getValue());
+            }
+        }
+        client.close();
+    }
+
+
+
 
 
     /**
