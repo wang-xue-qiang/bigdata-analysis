@@ -21,7 +21,7 @@ object NewSourceTest2 {
       .master("local")
       .getOrCreate()
     val sc = spark.sparkContext
-    val sourceRdd = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/new-source-data/p*")
+    val sourceRdd = sc.textFile("hdfs://node2.com:8020//spark-data/new-source-data/p*")
     val kvRDD = sourceRdd.map(_.split("\t")).map(attr =>(attr(0).toLong,attr(1)) )
     kvRDD.groupByKey(new CustomerPartitioner(12)).count
     kvRDD.groupByKey(new CustomerPartitioner(17)).count

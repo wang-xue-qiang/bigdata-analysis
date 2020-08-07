@@ -23,23 +23,23 @@ object NewSourceTest3 {
     val sc = spark.sparkContext
 
     //加载原始数据
-    val sourceRdd = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/new-source-data/p*")
+    val sourceRdd = sc.textFile("hdfs://node2.com:8020//spark-data/new-source-data/p*")
     val kvRdd = sourceRdd.map(_.split("\t")).map(attr => (attr(0).toLong, attr(1)))
 
     //大表数据 大量的key相同
     val bigRdd = kvRdd.map(x => {
       if (x._1 < 900001) (900001, x._2) else x
     }).map(x => x._1 + "," + x._2)
-    bigRdd.saveAsTextFile("hdfs://bigdata-node02.com:8020//spark-data/join/big-table")
+    bigRdd.saveAsTextFile("hdfs://node2.com:8020//spark-data/join/big-table")
 
     //小表数据
     val smallRdd = kvRdd.filter(_._1 > 900000).map(x => x._1 + "," + x._2)
-    smallRdd.saveAsTextFile("hdfs://bigdata-node02.com:8020//spark-data/join/small-table")
+    smallRdd.saveAsTextFile("hdfs://node1.com:8020//spark-data/join/small-table")
 
     //测试join
-    val bigSource = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/join/big-table/p*")
+    val bigSource = sc.textFile("hdfs://node2.com:8020//spark-data/join/big-table/p*")
     val bigKvRdd = bigSource.map(_.split(",")).map(attr => (attr(0).toLong, attr(1)))
-    val smallSource = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/join/small-table/p*")
+    val smallSource = sc.textFile("hdfs://node2.com:8020//spark-data/join/small-table/p*")
     val smallKvRdd = smallSource.map(_.split(",")).map(attr => (attr(0).toLong, attr(1)))
     bigKvRdd.join(smallKvRdd).count()
 

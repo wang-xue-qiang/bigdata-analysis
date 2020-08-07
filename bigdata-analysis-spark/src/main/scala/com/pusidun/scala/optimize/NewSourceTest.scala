@@ -17,7 +17,7 @@ object NewSourceTest {
       .master("local")
       .getOrCreate()
     val sc = spark.sparkContext
-    val sourceRdd = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/new-source-data/p*")
+    val sourceRdd = sc.textFile("hdfs://node2.com:8020//spark-data/new-source-data/p*")
     val kvRDD = sourceRdd.map(_.split("\t")).map(attr =>(attr(0).toLong,attr(1)) )
     //数据倾斜 第八个任务运行时间过长
     kvRDD.groupByKey(12).count()

@@ -19,12 +19,12 @@ object SourceData {
     val sc = spark.sparkContext
     import spark.implicits._
     //val sourceRdd = sc.textFile("./spark.txt")
-    val sourceRdd = sc.textFile("hdfs://bigdata-node02.com:8020//spark-data/source-data/spark.txt")
+    val sourceRdd = sc.textFile("hdfs://node2.com:8020//spark-data/source-data/spark.txt")
     val df = sourceRdd.map(_.split("\t")).map(attr => KeyWordLog(attr(0).toLong, attr(1), attr(2), attr(3).toLong, attr(3))).toDF()
     df.createOrReplaceTempView("sourceTable")
     //设置12个分区，大部分会落在第八个任务
-    val newSourceRdd = spark.sql("SELECT CASE WHEN id < 900000 THEN (8+(CAST( RAND() * 50000 AS BIGINT )) * 12) ELSE id END id,uid,keyWord,time url FROM sourceTable")
-    newSourceRdd.rdd.map(_.mkString("\t")).saveAsTextFile("hdfs://bigdata-node02.com:8020//spark-data/new-source-data")
+    val newSourceRdd = spark.sql("SELECT CASE WHEN id < 9000000 THEN (8+(CAST( RAND() * 50000 AS BIGINT )) * 12) ELSE id END id,uid,keyWord,time url FROM sourceTable")
+    newSourceRdd.rdd.map(_.mkString("\t")).saveAsTextFile("hdfs://node2.com:8020//spark-data/new-source-data")
     //newSourceRdd.rdd.map(_.mkString("\t")).saveAsTextFile("./new-source-data")
     sc.stop()
     spark.stop()
