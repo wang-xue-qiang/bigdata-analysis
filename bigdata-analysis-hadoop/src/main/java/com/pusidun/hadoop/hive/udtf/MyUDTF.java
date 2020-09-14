@@ -16,12 +16,15 @@ import java.util.List;
  * 自定义一个 UDTF 实现将一个任意分割符的字符串切割成独立的单词，例如：
  * line:"hello,world,hadoop,hive"
  *
- * Myudtf(line, ",")
+ * myudtf(line, ",")
  *
  * hello
  * world
  * hadoop
  * hive
+ * hive> add jar /opt/datas/my-udtf.jar;
+ * hive> create temporary function myudtf as "com.pusidun.hadoop.hive.udtf.MyUDTF";
+ * hive> select myudtf("hello,world,hadoop,hive",",");
  */
 public class MyUDTF extends GenericUDTF {
 
