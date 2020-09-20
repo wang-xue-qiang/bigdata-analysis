@@ -1,0 +1,195 @@
+数据清洗
+    yarn jar videoETL.jar /videoETL/video /videoETL/video-filter
+视频表字段描述表如下：
+    字段 备注 详细描述
+    videoId 视频唯一 id 11 位字符串
+    uploader 视频上传者 上传视频的用户名 String
+    age 视频年龄 视频在平台上的整数天
+    category 视频类别 上传视频指定的视频分类
+    length 视频长度 整形数字标识的视频长度
+    views 观看次数 视频被浏览的次数
+    rate 视频评分 满分 5 分
+    ratings 流量 视频的流量，整型数字
+    comments 评论数 一个视频的整数评论数
+    relatedId 相关视频 id 相关视频的 id，最多 20 个
+视频表如下：
+    create table video_ori(
+     videoId string,
+     uploader string,
+     age int,
+     category array<string>,
+     length int,
+     views int,
+     rate float,
+     ratings int,
+     comments int,
+     relatedId array<string>)
+    row format delimited
+    fields terminated by "\t"
+    collection items terminated by "&"
+    stored as orc;
+    或者stored as orc;
+视频表数据加载如下：
+    load data  inpath "/videoETL/video-filter" into table video_ori;
+视频表数据查看：
+    select * from video_ori limit 10;
+
+用户表字段描述表如下：
+    字段 备注 字段类型
+    uploader 上传者用户名 string
+    videos 上传视频数 int
+    friends 朋友数量 int
+
+用户表如下：
+create table video_user_ori(
+ uploader string,
+ videos int,
+ friends int)
+row format delimited
+fields terminated by "\t"
+stored as textfile;
+或者stored as orc;
+用户表数据加载如下：
+    load data  inpath "/videoETL/user" into table video_user_ori;
+用户表数据查看：
+    select * from video_user_ori limit 10;
+表orc结构存储：
+    insert into table video_user_orc select * from video_user_ori;
+    insert into table video_orc select * from video_ori;
+
+
+统计某影音视频网站的常规指标，各种 TopN 指标：
+--1.统计视频观看数Top10
+--2.统计视频类别热度Top10
+--3.统计视频观看数Top20所属类别以及类别包含的Top20的视频个数
+--4.统计视频观看数Top50 所关联视频的所属类别 Rank
+--5.统计每个类别中的视频热度Top10
+--6.统计每个类别中视频流量Top10
+--7.统计上传视频最多的用户Top10 以及他们上传的观看次数在前 20 视频
+--8.统计每个类别视频观看数Top10
+
+1.统计视频观看数 Top10
+select
+ views,
+ videoId,
+ uploader,
+ age,
+ category,
+ length,
+ rate,
+ ratings,
+ comments
+from video_orc
+order by views desc
+limit 10;
+
+结果：
+views	videoid	uploader	age	category	length	rate	ratings	comments
+42513417	dMH0bHeiRNg	judsonlaipply	415	["Comedy"]	360	4.68	87520	22718
+20282464	0XxI-hvPRRA	smosh	286	["Comedy"]	194	4.49	80710	35408
+16087899	1dmVU08zVpA	NBC	670	["Entertainment"]	165	4.79	30085	5945
+15712924	RB-wUgnyGv0	ChrisInScotland	506	["Entertainment"]	159	4.78	8222	1996
+15256922	QjA5faZF1A8	guitar90	308	["Music"]	320	4.84	120506	38393
+13199833	-_CSo1gOd48	tasha	190	["People","Blogs"]	205	3.71	38045	9904
+11970018	49IDp76kjPw	TexMachina	381	["Comedy"]	59	4.55	22579	5280
+11823701	tYnn51C3X_w	CowSayingMoo	516	["Music"]	231	4.67	29479	10367
+11672017	pv5zWaTEVkI	OkGo	531	["Music"]	184	4.83	42386	10082
+11184051	D2kJZOfq7zk	mrWoot	199	["People","Blogs"]	185	4.82	42162	10819
+
+2.统计视频类别热度 Top10
+select
+ category_name as category,
+ count(t.videoId) as hot
+from (select
+    videoId,
+    category_name
+from video_orc lateral view explode(category)  tmp_category as category_name)t
+group by t.category_name
+order by hot desc
+limit 10;
+结果：
+category	hot
+Music	179049
+Entertainment	127674
+Comedy	87818
+Animation	73293
+Film	73293
+Sports	67329
+Games	59817
+Gadgets	59817
+People	48890
+Blogs	48890
+
+
+
+--3.统计视频观看数Top20所属类别以及类别包含的Top20的视频个数
+select
+category_name,
+count(*) category_count
+from
+(select
+videoId,
+category_name
+from
+(select
+  videoId,
+  category,
+  views
+ from video_orc
+ order by views desc
+ limit 20)t lateral view explode(category) tmp_category as category_name)t2
+group by category_name
+order by category_count desc;
+结果：
+category_name	category_count
+Entertainment	6
+Comedy	6
+Music	5
+People	2
+Blogs	2
+UNA	1
+
+
+升级版：统计视频观看数Top20所属类别以及类别包含的Top50的视频个数
+
+
+
+--4.统计视频观看数Top50 所关联视频的所属类别 Rank
+select
+category_name,
+count(*) category_count
+from
+(
+select
+category
+from
+(select
+related_id
+from
+(select
+relatedId,
+views
+from video_orc
+order by views desc
+limit 50)t
+lateral view explode(relatedId) tmp_relatedId as related_id
+group by  related_id)t2
+join video_orc orc on t2.related_id = orc.videoId;
+)t3 lateral view explode(category) tmp_category as category_name
+group by category_name
+order by category_count desc;
+
+
+
+--5.统计每个类别中的视频热度Top10
+--6.统计每个类别中视频流量Top10
+--8.统计每个类别视频观看数Top10
+数仓中间表
+
+
+
+
+--5.统计每个类别中的视频热度Top10
+--6.统计每个类别中视频流量Top10
+--7.统计上传视频最多的用户Top10 以及他们上传的观看次数在前 20 视频
+--8.统计每个类别视频观看数Top10
