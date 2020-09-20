@@ -1,4 +1,3 @@
-/*
 package com.pusidun.hadoop.hive.udtf;
 
 
@@ -13,7 +12,6 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 import java.util.ArrayList;
 import java.util.List;
 
-*/
 /**
  * 自定义一个 UDTF 实现将一个任意分割符的字符串切割成独立的单词，例如：
  * line:"hello,world,hadoop,hive"
@@ -24,8 +22,7 @@ import java.util.List;
  * world
  * hadoop
  * hive
- *//*
-
+ */
 public class MyUDTF extends GenericUDTF {
 
     private List<String> outList = new ArrayList<>();
@@ -65,4 +62,3 @@ public class MyUDTF extends GenericUDTF {
 
     }
 }
-*/
