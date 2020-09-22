@@ -24,8 +24,13 @@ public class MockKeyWords {
     private static void genFileData(){
         try {
             FileOutputStream fos = new FileOutputStream("./keywords.txt",true);
-            for (int i = 1; i <= 10000 ; i++) {
-                String msg = String.format("%010d", InfoUtils.getNum(1,10000)) + "\t" + InfoUtils.getSearchWords() +"\n";
+            for (int i = 1; i <= 10000000 ; i++) {
+                //String msg = String.format("%010d", InfoUtils.getNum(1,10000)) + "\t" + InfoUtils.getSearchWords() +"\n";
+                String uid = String.format("%010d", InfoUtils.getNum(1,10000));
+                String keyWord = InfoUtils.getSearchWords();
+                long time = System.currentTimeMillis();
+                String url = InfoUtils.getURL();
+                String msg = i+"\t"+uid+"\t"+keyWord+"\t"+time+"\t"+url+"\n";
                 fos.write(msg.getBytes());
             }
             fos.close();
