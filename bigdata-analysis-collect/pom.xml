@@ -46,6 +46,7 @@
 
     <!--编译打包插件-->
     <build>
+        <finalName>data-collect</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

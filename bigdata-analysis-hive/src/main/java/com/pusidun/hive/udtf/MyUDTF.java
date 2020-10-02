@@ -1,4 +1,4 @@
-package com.pusidun.hadoop.hive.udtf;
+package com.pusidun.hive.udtf;
 
 
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
