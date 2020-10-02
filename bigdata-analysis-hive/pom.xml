@@ -13,16 +13,34 @@
         <hive.version>1.2.1</hive.version>
     </properties>
 
+
+
     <dependencies>
         <!--添加hive依赖-->
         <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-exec</artifactId>
             <version>${hive.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hive-exec-1.2.1.jar</systemPath>
         </dependency>
+
+
+
+        <!-- https://mvnrepository.com/artifact/org.pentaho/pentaho-aggdesigner-algorithm -->
+       <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>pentaho-aggdesigner-algorithm</artifactId>
+            <version>5.1.5-jhyde</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/pentaho-aggdesigner-algorithm-5.1.5-jhyde.jar</systemPath>
+        </dependency>
+
+
     </dependencies>
 
     <build>
+        <finalName>my-hive-udf</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
