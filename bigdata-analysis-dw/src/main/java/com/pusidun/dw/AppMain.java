@@ -206,7 +206,7 @@ public class AppMain {
         s_uid++;
 
         //系统分组
-        appBase.setGroupId(rand.nextInt(101)+"");
+        appBase.setGroupId(rand.nextInt(101) + "");
 
         // 程序版本号 5,6等
         appBase.setVc("" + rand.nextInt(20));
@@ -429,17 +429,17 @@ public class AppMain {
         //昵称
         appStart.setNickName(getCONTENT());
         //头像
-        appStart.setPhotoIndex(rand.nextInt(23)+1);
+        appStart.setPhotoIndex(rand.nextInt(23) + 1);
         //头像框
-        appStart.setPhotoFrameIndex(rand.nextInt(10)+1);
+        appStart.setPhotoFrameIndex(rand.nextInt(10) + 1);
         //签到天数
-        appStart.setSignDay(rand.nextInt(10)+1);
+        appStart.setSignDay(rand.nextInt(10) + 1);
         //钻石
-        appStart.setDiamond(rand.nextInt(10000)+1);
+        appStart.setDiamond(rand.nextInt(10000) + 1);
         //金币
-        appStart.setCoin(rand.nextInt(3000)+1);
+        appStart.setCoin(rand.nextInt(3000) + 1);
         //主线关卡
-        appStart.setNormalLevel(rand.nextInt(6000)+1);
+        appStart.setNormalLevel(rand.nextInt(6000) + 1);
         return appStart;
     }
 
@@ -461,16 +461,16 @@ public class AppMain {
      */
     private static Object generateLuckDraw() {
         AppLuckDraw luckDraw = new AppLuckDraw();
-        String[] kinds = {"diamond","energy","ball","gold","feiDie"};
-        Integer[] diamondKinds = {30,70,120};
-        Integer[] energyKinds = {4,8};
+        String[] kinds = {"diamond", "energy", "ball", "gold", "feiDie"};
+        Integer[] diamondKinds = {30, 70, 120};
+        Integer[] energyKinds = {4, 8};
         String kind = kinds[rand.nextInt(kinds.length)];
         luckDraw.setAdRewardKind(kind);
-        if("diamond".equals(kind)){
+        if ("diamond".equals(kind)) {
             luckDraw.setAdReward(diamondKinds[rand.nextInt(diamondKinds.length)]);
-        }else if ("energy".equals(kind)){
+        } else if ("energy".equals(kind)) {
             luckDraw.setAdReward(energyKinds[rand.nextInt(energyKinds.length)]);
-        }else{
+        } else {
             luckDraw.setAdReward(1);
         }
 
@@ -495,46 +495,46 @@ public class AppMain {
      */
     private static Object generateShopBuy() {
         AppShopBuy shopBuy = new AppShopBuy();
-        String[] kinds = {"diamond","removeAd","gift","ad"};
-        String[] diamondKinds ={"$0.99","$2.99","$4.99","$9.99","$29.99","$49.99","$99.99"};
-        String[] giftKinds ={"$2.99","$9.99"};
+        String[] kinds = {"diamond", "removeAd", "gift", "ad"};
+        String[] diamondKinds = {"$0.99", "$2.99", "$4.99", "$9.99", "$29.99", "$49.99", "$99.99"};
+        String[] giftKinds = {"$2.99", "$9.99"};
 
         String kind = kinds[rand.nextInt(kinds.length)];
         shopBuy.setAction(kind);
 
-        if("ad".equals(kinds)){
+        if ("ad".equals(kinds)) {
             shopBuy.setBuyKind("ad");
             shopBuy.setDiamond(20);
-        }else if("removeAd".equals(kinds)){
+        } else if ("removeAd".equals(kinds)) {
             shopBuy.setBuyKind("$2.99");
-        }else if("gift".equals(kinds)){
+        } else if ("gift".equals(kinds)) {
             String giftKind = giftKinds[rand.nextInt(giftKinds.length)];
             shopBuy.setBuyKind(giftKind);
-            if("$2.99".equals(giftKind)){
+            if ("$2.99".equals(giftKind)) {
                 shopBuy.setDiamond(540);
                 shopBuy.setEnergy(50);
                 shopBuy.setBallList("1");
-            }else{
+            } else {
                 shopBuy.setDiamond(800);
                 shopBuy.setPropList("1,1,1,1,1,1,1,1");
             }
 
-        }else{
+        } else {
             String diamondKind = diamondKinds[rand.nextInt(diamondKinds.length)];
             shopBuy.setBuyKind(diamondKind);
-            if("$0.99".equals(diamondKind)){
+            if ("$0.99".equals(diamondKind)) {
                 shopBuy.setDiamond(100);
-            }else if("$2.99".equals(diamondKind)){
+            } else if ("$2.99".equals(diamondKind)) {
                 shopBuy.setDiamond(300);
-            }else if("$4.99".equals(diamondKind)){
+            } else if ("$4.99".equals(diamondKind)) {
                 shopBuy.setDiamond(580);
-            }else if("$9.99".equals(diamondKind)){
+            } else if ("$9.99".equals(diamondKind)) {
                 shopBuy.setDiamond(1250);
-            }else if("$29.99".equals(diamondKind)){
+            } else if ("$29.99".equals(diamondKind)) {
                 shopBuy.setDiamond(3900);
-            }else if("$49.99".equals(diamondKind)){
+            } else if ("$49.99".equals(diamondKind)) {
                 shopBuy.setDiamond(6750);
-            }else if("$99.99".equals(diamondKind)){
+            } else if ("$99.99".equals(diamondKind)) {
                 shopBuy.setDiamond(15500);
             }
         }
@@ -547,32 +547,32 @@ public class AppMain {
      */
     private static Object generateBall() {
         AppBall ball = new AppBall();
-        String[] kinds = {"diamond","coin","ad"};
+        String[] kinds = {"diamond", "coin", "ad"};
         Integer[] ballList = {
-                1,2,3,4,5,6,7,8,9,10,
-                11,12,13,14,15,16,17,18,19,20,
-                21,22,23,24,25,26,27,28,29,30,31,32,33
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33
         };
         String kind = kinds[rand.nextInt(kinds.length)];
         ball.setAction(kind);
-        if("ad".equals(kind)){
+        if ("ad".equals(kind)) {
             ball.setBall(ballList[rand.nextInt(ballList.length)]);
-        }else if ("coin".equals(kind)){
+        } else if ("coin".equals(kind)) {
             Integer buyBall = ballList[rand.nextInt(ballList.length)];
-            if(buyBall>=1 && buyBall <= 13){
+            if (buyBall >= 1 && buyBall <= 13) {
                 ball.setNum(600);
-            }else if(buyBall>=14 && buyBall <= 20){
+            } else if (buyBall >= 14 && buyBall <= 20) {
                 ball.setNum(660);
-            }else if(buyBall>=21 && buyBall <= 33){
+            } else if (buyBall >= 21 && buyBall <= 33) {
                 ball.setNum(750);
             }
-        }else if ("diamond".equals(kind)){
+        } else if ("diamond".equals(kind)) {
             Integer buyBall = ballList[rand.nextInt(ballList.length)];
-            if(buyBall>=1 && buyBall <= 13){
+            if (buyBall >= 1 && buyBall <= 13) {
                 ball.setNum(400);
-            }else if(buyBall>=14 && buyBall <= 20){
+            } else if (buyBall >= 14 && buyBall <= 20) {
                 ball.setNum(440);
-            }else if(buyBall>=21 && buyBall <= 33){
+            } else if (buyBall >= 21 && buyBall <= 33) {
                 ball.setNum(500);
             }
         }
@@ -586,7 +586,7 @@ public class AppMain {
     private static Object generateDingYue() {
         AppDingYue dingYue = new AppDingYue();
         int flag = rand.nextInt(2) + 1;
-        dingYue.setAction(flag+"");
+        dingYue.setAction(flag + "");
         JSONObject jsonObject = (JSONObject) JSON.toJSON(dingYue);
         return packEventJson("dingYue", jsonObject);
     }
@@ -597,9 +597,9 @@ public class AppMain {
     private static Object generateShopWindow() {
         AppShopWindow shopWindow = new AppShopWindow();
         int flag = rand.nextInt(10) + 1;
-        shopWindow.setAction(flag+"");
+        shopWindow.setAction(flag + "");
         flag = rand.nextInt(20) + 1;
-        shopWindow.setBuyKind(flag+"");
+        shopWindow.setBuyKind(flag + "");
         JSONObject jsonObject = (JSONObject) JSON.toJSON(shopWindow);
         return packEventJson("shopWindow", jsonObject);
     }
@@ -623,46 +623,46 @@ public class AppMain {
     private static Object generateDiamond() {
         AppDiamond diamond = new AppDiamond();
 
-        String[] kinds = {"add","reduce"};
-        String[] addConditions = {"sign","luckDraw","free","buyDiamond"};
-        Integer[] signkinds = {50,80,100};
-        Integer[] luckDrawkinds = {30,70,120};
+        String[] kinds = {"add", "reduce"};
+        String[] addConditions = {"sign", "luckDraw", "free", "buyDiamond"};
+        Integer[] signkinds = {50, 80, 100};
+        Integer[] luckDrawkinds = {30, 70, 120};
         Integer[] freekinds = {20};
-        Integer[] buyDiamondkinds = {100,300,540,580,800,1250,3900,6750,15500};
-        String[] reduceConditions = {"buyBall","buyProp","buyEnergy"};
-        Integer[] buyBallkinds = {320,350,400,440,500,660};
-        Integer[] buyPropkinds = {50,100};
-        Integer[] buyEnergykinds = {50,80,60};
+        Integer[] buyDiamondkinds = {100, 300, 540, 580, 800, 1250, 3900, 6750, 15500};
+        String[] reduceConditions = {"buyBall", "buyProp", "buyEnergy"};
+        Integer[] buyBallkinds = {320, 350, 400, 440, 500, 660};
+        Integer[] buyPropkinds = {50, 100};
+        Integer[] buyEnergykinds = {50, 80, 60};
 
 
         String kind = kinds[rand.nextInt(kinds.length)];
         diamond.setAction(kind);
 
-        if("add".equals(kind)){
+        if ("add".equals(kind)) {
             String condition = addConditions[rand.nextInt(addConditions.length)];
             diamond.setCondition(condition);
-            if("sign".equals(condition)){
+            if ("sign".equals(condition)) {
                 int num = signkinds[rand.nextInt(signkinds.length)];
                 diamond.setNum(num);
-            }else if("luckDraw".equals(condition)){
+            } else if ("luckDraw".equals(condition)) {
                 int num = luckDrawkinds[rand.nextInt(luckDrawkinds.length)];
                 diamond.setNum(num);
-            }else if("free".equals(condition)){
+            } else if ("free".equals(condition)) {
                 diamond.setNum(20);
-            }else if("buyDiamond".equals(condition)){
+            } else if ("buyDiamond".equals(condition)) {
                 int num = buyDiamondkinds[rand.nextInt(buyDiamondkinds.length)];
                 diamond.setNum(num);
             }
-        }else{
+        } else {
             String condition = reduceConditions[rand.nextInt(reduceConditions.length)];
             diamond.setCondition(condition);
-            if("buyBall".equals(condition)){
+            if ("buyBall".equals(condition)) {
                 int num = buyBallkinds[rand.nextInt(buyBallkinds.length)];
                 diamond.setNum(num);
-            }else if("buyProp".equals(condition)){
+            } else if ("buyProp".equals(condition)) {
                 int num = buyPropkinds[rand.nextInt(buyPropkinds.length)];
                 diamond.setNum(num);
-            }else if("buyEnergy".equals(condition)){
+            } else if ("buyEnergy".equals(condition)) {
                 int num = buyEnergykinds[rand.nextInt(buyEnergykinds.length)];
                 diamond.setNum(num);
             }
@@ -676,28 +676,28 @@ public class AppMain {
      */
     private static Object generateCoin() {
         AppCoin coin = new AppCoin();
-        String[] conditions = {"buyBall","gameOver"};
+        String[] conditions = {"buyBall", "gameOver"};
         String condition = conditions[rand.nextInt(conditions.length)];
         Integer[] ballList = {
-                1,2,3,4,5,6,7,8,9,10,
-                11,12,13,14,15,16,17,18,19,20,
-                21,22,23,24,25,26,27,28,29,30,31,32,33
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33
         };
         coin.setCondition(condition);
-        if("buyBall".equals(condition)){
+        if ("buyBall".equals(condition)) {
             coin.setAction("reduce");
             Integer buyBall = ballList[rand.nextInt(ballList.length)];
-            coin.setBall(buyBall+"");
-            if(buyBall>=1 && buyBall <= 13){
+            coin.setBall(buyBall + "");
+            if (buyBall >= 1 && buyBall <= 13) {
                 coin.setNum(600);
-            }else if(buyBall>=14 && buyBall <= 20){
+            } else if (buyBall >= 14 && buyBall <= 20) {
                 coin.setNum(660);
-            }else if(buyBall>=21 && buyBall <= 33){
+            } else if (buyBall >= 21 && buyBall <= 33) {
                 coin.setNum(750);
             }
-        }else{
+        } else {
             coin.setAction("add");
-            coin.setNum(rand.nextInt(30)+1);
+            coin.setNum(rand.nextInt(30) + 1);
         }
         JSONObject jsonObject = (JSONObject) JSON.toJSON(coin);
         return packEventJson("coin", jsonObject);
@@ -708,15 +708,15 @@ public class AppMain {
      */
     private static Object generateProp() {
         AppProp prop = new AppProp();
-        String[] kinds = {"add","reduce"};
-        String[] conditions = {"buy","gameUse"};
+        String[] kinds = {"add", "reduce"};
+        String[] conditions = {"buy", "gameUse"};
         String kind = kinds[rand.nextInt(kinds.length)];
         prop.setAction(kind);
-        if("reduce".equals(kind)){
-            prop.setCondition("gameUse"+rand.nextInt(7)+1);
+        if ("reduce".equals(kind)) {
+            prop.setCondition("gameUse" + rand.nextInt(7) + 1);
             prop.setNum(1);
-        }else{
-            prop.setCondition("buy"+rand.nextInt(7)+1);
+        } else {
+            prop.setCondition("buy" + rand.nextInt(7) + 1);
             prop.setNum(1);
         }
         JSONObject jsonObject = (JSONObject) JSON.toJSON(prop);
@@ -728,10 +728,10 @@ public class AppMain {
      */
     private static Object generateGift() {
         AppGift gift = new AppGift();
-        String[] kinds = {"buy","free","ad"};
+        String[] kinds = {"buy", "free", "ad"};
         String kind = kinds[rand.nextInt(kinds.length)];
         gift.setAction(kind);
-        gift.setLevel(rand.nextInt(6000)+1);
+        gift.setLevel(rand.nextInt(6000) + 1);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(gift);
         return packEventJson("gift", jsonObject);
     }
@@ -741,11 +741,11 @@ public class AppMain {
      */
     private static Object generateAd() {
         AppAd ad = new AppAd();
-        String[] kinds = {"ad","video"};
+        String[] kinds = {"ad", "video"};
         String kind = kinds[rand.nextInt(kinds.length)];
         ad.setAction(kind);
-        if("video".equals(kind)){
-            ad.setResult(rand.nextInt(1)+1);
+        if ("video".equals(kind)) {
+            ad.setResult(rand.nextInt(1) + 1);
         }
         JSONObject jsonObject = (JSONObject) JSON.toJSON(ad);
         return packEventJson("ad", jsonObject);
@@ -756,11 +756,11 @@ public class AppMain {
      */
     private static Object generateActivity() {
         AppActivity activity = new AppActivity();
-        String[] kinds = {"icySummer","deer","bigMap"};
+        String[] kinds = {"icySummer", "deer", "bigMap"};
         String kind = kinds[rand.nextInt(kinds.length)];
         activity.setAction(kind);
-        activity.setLevel(rand.nextInt(30)+1);
-        activity.setResult(rand.nextInt(1)+1);
+        activity.setLevel(rand.nextInt(30) + 1);
+        activity.setResult(rand.nextInt(1) + 1);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(activity);
         return packEventJson("activity", jsonObject);
     }
@@ -770,11 +770,11 @@ public class AppMain {
      */
     private static Object generateUGC() {
         AppUgcComment ugcComment = new AppUgcComment();
-        String[] kinds = {"new","hot"};
+        String[] kinds = {"new", "hot"};
         String kind = kinds[rand.nextInt(kinds.length)];
         ugcComment.setAction(kind);
         ugcComment.setUgcId(rand.nextInt(20000));
-        ugcComment.setResult(rand.nextInt(1)+1);
+        ugcComment.setResult(rand.nextInt(1) + 1);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(ugcComment);
         return packEventJson("ugcComment", jsonObject);
     }

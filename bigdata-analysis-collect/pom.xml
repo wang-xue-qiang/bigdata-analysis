@@ -64,7 +64,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.pusidun.data_warehouse.test.AppMain</mainClass>
+                            <mainClass>com.pusidun.dw.AppMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
