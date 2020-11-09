@@ -29,7 +29,7 @@ object StatisticsRecommend {
       "mongo.db" -> "recommender"
     )
     // 创建一个sparkConf
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StatisticsRecommeder")
+    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StatisticsRecommend")
 
     // 创建一个SparkSession
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()

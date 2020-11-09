@@ -27,7 +27,7 @@ case class UserRecs( uid: Int, recs: Seq[Recommendation] )
 // 定义基于LFM电影特征向量的电影相似度列表
 case class MovieRecs( mid: Int, recs: Seq[Recommendation] )
 
-object StreamingRecommender {
+object StreamingRecommend {
 
   val MAX_USER_RATINGS_NUM = 20
   val MAX_SIM_MOVIES_NUM = 20
@@ -43,7 +43,7 @@ object StreamingRecommender {
       "kafka.topic" -> "recommender"
     )
 
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StreamingRecommender")
+    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StreamingRecommend")
 
     // 创建一个SparkSession
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
