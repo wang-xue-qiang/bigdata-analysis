@@ -1,0 +1,11 @@
+primary:
+    mongodb:
+        host: localhost
+        port: 27017
+        database: recommender
+
+secondary:
+    mongodb:
+        host: localhost
+        port: 27017
+        database: pusidunGames
