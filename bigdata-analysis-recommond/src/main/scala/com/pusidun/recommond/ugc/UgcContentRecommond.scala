@@ -51,7 +51,7 @@ object UgcContentRecommond {
     val wordsData = tokenizer.transform(ugcDF)
 
     // 引入HashingTF工具，可以把一个词语序列转化成对应的词频
-    val hashingTF = new HashingTF().setInputCol("words").setOutputCol("rawFeatures").setNumFeatures(50)
+    val hashingTF = new HashingTF().setInputCol("words").setOutputCol("rawFeatures").setNumFeatures(100)
     val featurizedData = hashingTF.transform(wordsData)
 
     // 引入IDF工具，可以得到idf模型
@@ -81,10 +81,10 @@ object UgcContentRecommond {
           (a._1, (b._1, simScore))
         }
       }
-      .filter(_._2._2 > 0.8) // 过滤出相似度大于0.8的
+      .filter(_._2._2 > 0.9) // 过滤出相似度大于0.9的
       .groupByKey()
       .map {
-        case (id, items) => UGCRecs(id, items.toList.sortWith(_._2 > _._2).map(x => Recommendation(x._1, x._2)))
+        case (id, items) => UGCRecs(id, items.toList.sortWith(_._2 > _._2).take(100).map(x => Recommendation(x._1, x._2)))
       }
       .toDF()
 
