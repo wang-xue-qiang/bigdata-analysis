@@ -64,7 +64,7 @@ object UgcOfflineRecommend {
     // 加载数据
     val ratingRDD = spark.read
       .option("uri", "mongodb://localhost:27017/recommender")
-      .option("collection", "ugcRecs")
+      .option("collection", "ugcRecsTop30")
       .format("com.mongodb.spark.sql")
       .load()
       .createOrReplaceTempView("ugcRecs")
@@ -73,7 +73,7 @@ object UgcOfflineRecommend {
     val ugcRecs  = spark.sql("select a.id,b.author,b.name,b.enauthor,b.enname,b.play,b.praise,a.recs from ugcRecs a left join ugc_content b  where a.id = b.id  and b.type =3 order by b.play desc")
     ugcRecs.write
       .option("uri", "mongodb://localhost:27017/pusidunGames")
-      .option("collection", "ugcContentRecs")
+      .option("collection", "ugcContentRecsTop30")
       .mode("overwrite")
       .format("com.mongodb.spark.sql")
       .save()

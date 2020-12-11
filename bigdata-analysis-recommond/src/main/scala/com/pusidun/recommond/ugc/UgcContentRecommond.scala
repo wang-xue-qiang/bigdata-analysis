@@ -84,14 +84,14 @@ object UgcContentRecommond {
       .filter(_._2._2 > 0.9) // 过滤出相似度大于0.9的
       .groupByKey()
       .map {
-        case (id, items) => UGCRecs(id, items.toList.sortWith(_._2 > _._2).take(100).map(x => Recommendation(x._1, x._2)))
+        case (id, items) => UGCRecs(id, items.toList.sortWith(_._2 > _._2).take(30).map(x => Recommendation(x._1, x._2)))
       }
       .toDF()
 
 
     ugcRecs.write
       .option("uri", "mongodb://localhost:27017/recommender")
-      .option("collection", "ugcRecs")
+      .option("collection", "ugcRecsTop30")
       .mode("overwrite")
       .format("com.mongodb.spark.sql")
       .save()
