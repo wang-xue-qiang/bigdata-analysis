@@ -1,4 +1,4 @@
-package com.pusidun.groupchat;
+package com.pusidun.netty.groupchat;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

@@ -1,4 +1,4 @@
-package com.pusidun.buf;
+package com.pusidun.netty.buf;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

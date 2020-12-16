@@ -1,4 +1,4 @@
-package com.pusidun.groupchat;
+package com.pusidun.netty.groupchat;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;

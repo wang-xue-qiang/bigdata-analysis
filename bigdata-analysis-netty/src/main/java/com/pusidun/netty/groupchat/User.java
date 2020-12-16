@@ -1,4 +1,4 @@
-package com.pusidun.groupchat;
+package com.pusidun.netty.groupchat;
 
 public class User {
     private int id;

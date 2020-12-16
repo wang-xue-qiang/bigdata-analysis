@@ -1,4 +1,4 @@
-package com.pusidun.groupchat;
+package com.pusidun.netty.groupchat;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,10 +8,6 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> {
 
