@@ -8,5 +8,29 @@
     <artifactId>bigdata-analysis-netty</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <protobuf-java.version>3.6.1</protobuf-java.version>
+        <protobuf-javanano.version>3.1.0</protobuf-javanano.version>
+    </properties>
+
+    <dependencies>
+        <!--        <dependency>
+                    <groupId>com.google.protobuf</groupId>
+                    <artifactId>protobuf-java</artifactId>
+                    <version>3.6.1</version>
+                </dependency>-->
+        <!--先添加依赖包，我们选择生成javanano格式的代码，当然你也可以选择生成grpc格式的代码，javanano是protobuf-maven-plugin原生支持的，所有支持的原生的代码格式：java,avanano,js,csharp,cpp,python,descriptor-set-->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf.nano</groupId>
+            <artifactId>protobuf-javanano</artifactId>
+            <version>${protobuf-javanano.version}</version>
+        </dependency>
+        <!--添加protobuf-maven-plugin-->
+    </dependencies>
 
 </project>
