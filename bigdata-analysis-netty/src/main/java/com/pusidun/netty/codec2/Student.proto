@@ -1,3 +1,5 @@
+// protoc.exe --java_out=. Student.proto
+
 syntax = "proto3"; //版本
 option optimize_for = SPEED;//加快解析
 option  java_package = "com.pusidun.netty.codec2"; //指定生成到哪个包下
