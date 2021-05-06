@@ -19,8 +19,7 @@ public class KafkaProducer {
 
     {
         Properties props = new Properties();
-        //props.put("bootstrap.servers","bigdata-node01.com:9092,bigdata-node02.com:9092,bigdata-node03.com:9092");
-        props.put("bootstrap.servers", "node1.com:9092,node2.com:9092,node3.com:9092");
+        props.put("bootstrap.servers", "192.168.12.138:9092,192.168.12.139:9092,192.168.12.140:9092");
         props.put("serializer.class", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("acks", "0");
         props.put("retries", "0");
@@ -98,5 +97,10 @@ public class KafkaProducer {
         return ProducerKafkaHolder.instance;
     }
 
+
+    public static void main(String[] args)  throws Exception {
+        KafkaProducer producer = KafkaProducer.getInstance();
+        producer.sendMessgae("test", "test");
+    }
 
 }

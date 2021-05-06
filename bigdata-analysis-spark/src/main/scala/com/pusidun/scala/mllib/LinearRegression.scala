@@ -1,3 +1,4 @@
+/*
 package com.pusidun.scala.mllib
 
 import org.apache.spark.{SparkConf, SparkContext}
@@ -56,4 +57,4 @@ object LinearRegression {
 
     sc.stop()
   }
-}
+}*/
