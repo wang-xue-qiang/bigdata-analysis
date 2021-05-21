@@ -1,8 +1,12 @@
 package com.pusidun.flink.streaming.uv;
 
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.pusidun.utils.DateUtils;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -12,6 +16,7 @@ import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrderness
 import org.apache.flink.streaming.api.functions.windowing.AllWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import java.util.*;
@@ -35,27 +40,32 @@ public class UniqueVisitorTask {
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        String topic = "topic-s3-launch";
+        String topic = "topic_game_log";
         Properties properties = new Properties();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "node1.com:9092,node2.com:9092,node3.com:9092");
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-group");
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "hadoop101:9092,hadoop102:9092,hadoop103:9092");
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-group2");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         //如果没有记录偏移量，第一次从最开始消费earliest、latest
-        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         //Kafka的消费者，不自动提交偏移量
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
         SingleOutputStreamOperator<Map> apply =
-                //env.addSource(new FlinkKafkaConsumer<String>(topic, new SimpleStringSchema(), properties))
-                  env.readTextFile("./uv.txt")
+                env.addSource(new FlinkKafkaConsumer<String>(topic, new SimpleStringSchema(), properties))
+                  //env.readTextFile("./uv.txt")
                     .map(new MapFunction<String, UniqueVisitorEntity>() {
                         @Override
                         public UniqueVisitorEntity map(String s) throws Exception {
-                            String[] strings = s.split("\t");
+
+
+                            JSONObject jsonobj = JSON.parseObject(s);
+                            String uid = jsonobj.getJSONObject("common").getString("uid");
+                            long ts = Long.parseLong(jsonobj.get("ts").toString());
+                            System.out.println(ts+": "+uid);
                             UniqueVisitorEntity entity = new UniqueVisitorEntity();
-                            entity.setUid(strings[0]);
-                            entity.setEventTime(Long.parseLong(strings[1]));
+                            entity.setUid(uid);
+                            entity.setEventTime(ts);
                             return entity;
                         }
                     })

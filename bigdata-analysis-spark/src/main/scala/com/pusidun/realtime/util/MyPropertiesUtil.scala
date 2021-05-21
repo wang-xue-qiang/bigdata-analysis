@@ -24,8 +24,7 @@ object MyPropertiesUtil {
     val prop: Properties = new Properties()
     //加载指定的配置文件
     prop.load(new InputStreamReader(
-      Thread.currentThread().getContextClassLoader.getResourceAsStream(propertiesName),
-      StandardCharsets.UTF_8))
+      Thread.currentThread().getContextClassLoader.getResourceAsStream(propertiesName), StandardCharsets.UTF_8))
     prop
   }
 }

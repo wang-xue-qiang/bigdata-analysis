@@ -25,7 +25,7 @@ public class EsClientUtils {
                 .build();
         try{
             transportClient = new PreBuiltTransportClient(settings)
-                    .addTransportAddresses(new TransportAddress(InetAddress.getByName("192.168.12.130"),9300));
+                    .addTransportAddresses(new TransportAddress(InetAddress.getByName("hadoop102"),9300));
         }catch (Exception e){
             e.printStackTrace();
         }

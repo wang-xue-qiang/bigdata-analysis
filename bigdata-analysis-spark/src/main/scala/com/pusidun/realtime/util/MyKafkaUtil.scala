@@ -31,7 +31,7 @@ object MyKafkaUtil {
     "enable.auto.commit" -> (false: java.lang.Boolean)
   )
 
-  //
+  //默认消费组
   def getKafkaStream(topic: String, ssc: StreamingContext): InputDStream[ConsumerRecord[String, String]] = {
     val dStream = KafkaUtils.createDirectStream[String, String](
       ssc,
@@ -52,8 +52,7 @@ object MyKafkaUtil {
   }
 
   //从指定的偏移量位置读取数据
-  def getKafkaStream(topic: String, ssc: StreamingContext, offsets: Map[TopicPartition, Long], groupId: String)
-  : InputDStream[ConsumerRecord[String, String]] = {
+  def getKafkaStream(topic: String, ssc: StreamingContext, offsets: Map[TopicPartition, Long], groupId: String): InputDStream[ConsumerRecord[String, String]] = {
     kafkaParam("group.id") = groupId
     val dStream = KafkaUtils.createDirectStream[String, String](
       ssc,
@@ -61,4 +60,7 @@ object MyKafkaUtil {
       ConsumerStrategies.Subscribe[String, String](Array(topic), kafkaParam, offsets))
     dStream
   }
+
+
+
 }

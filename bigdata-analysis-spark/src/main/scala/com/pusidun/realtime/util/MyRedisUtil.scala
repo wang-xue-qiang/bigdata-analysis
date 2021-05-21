@@ -1,5 +1,6 @@
-/*
 package com.pusidun.realtime.util
+
+import redis.clients.jedis.{Jedis, JedisPool, JedisPoolConfig}
 
 /**
  * 获取redis连接
@@ -22,7 +23,7 @@ object MyRedisUtil {
     jedisPoolConfig.setMaxWaitMillis(5000) //忙碌时等待时长 毫秒
     jedisPoolConfig.setTestOnBorrow(true) //每次获得连接的进行测试
 
-    jedisPool = new JedisPool(jedisPoolConfig, host, port.toInt)
+    jedisPool = new JedisPool(jedisPoolConfig, host, port.toInt, 2000,"pusidunResis123..#")
   }
 
   //获取Jedis客户端
@@ -35,7 +36,8 @@ object MyRedisUtil {
 
   def main(args: Array[String]): Unit = {
     val jedis = getJedisClient()
+    jedis.set("k1","v1")
     println(jedis.ping())
   }
 }
-*/
+
