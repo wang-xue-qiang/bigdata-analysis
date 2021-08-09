@@ -81,7 +81,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.6.0</version>
+            <version>6.8.17</version>
         </dependency>
 
         <!--注意 底层引用的\org\glassfish\javax.el\3.0.1-b06-SNAPSHOT在仓库中已经移除了我们这里引用其稳定版本-->
