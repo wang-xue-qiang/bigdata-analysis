@@ -21,7 +21,7 @@
     </build>
 
     <properties>
-        <protobuf-java.version>3.6.1</protobuf-java.version>
+        <protobuf-java.version>3.16.1</protobuf-java.version>
         <protobuf-javanano.version>3.1.0</protobuf-javanano.version>
     </properties>
 
