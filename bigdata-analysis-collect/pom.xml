@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <kafka.version>0.11.0.0</kafka.version>
+        <kafka.version>0.11.0.2</kafka.version>
         <slf4j.version>1.7.20</slf4j.version>
         <logback.version>1.0.7</logback.version>
     </properties>
